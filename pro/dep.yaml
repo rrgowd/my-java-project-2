@@ -12,6 +12,17 @@ spec:
       labels:
         app: java-app
     spec:
+      initContainers:
+        - name: wait-for-mysql
+          image: busybox
+          command:
+            - sh
+            - -c
+            - >
+              until nc -z mysql-service 3306; do
+                echo "Waiting for MySQL...";
+                sleep 5;
+              done
       containers:
         - name: java-app
           image: rrgowd/my-java-project:1.0.0
@@ -40,4 +51,4 @@ spec:
   ports:
     - port: 8080
       targetPort: 8080
-      nodePort: 30080
+      nodePort: 31000
